@@ -9,7 +9,7 @@ admin.initializeApp({
 
 var db = admin.firestore();
 
-db.collection("bskEvents").where('district', '==', 'AHMEDABAD').where('state', '==', 'GUJARAT')
+db.collection("bskEvents")
   .get().then(snap => {
   console.log("snap", snap.docs.length);
   let docs = []
@@ -18,6 +18,6 @@ db.collection("bskEvents").where('district', '==', 'AHMEDABAD').where('state', '
   });
   console.log("docs", docs)
   var xls = json2xls(docs)
-  fs.writeFileSync('ahmedabad.xls', xls,'binary')
+  fs.writeFileSync('india_tpd_2021_final.xls', xls,'binary')
 })
 
