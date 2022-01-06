@@ -36,12 +36,16 @@ app.post(`/${KEY}/profile-upload-single`, upload.single('profile-file'), async f
   // req.file is the `profile-file` file
   // req.body will hold the text fields, if there were any
   const collection = client.db('bskeventsdb').collection('bskEvents');
+  var timestamp = parseInt(req.body.timestamp)
+  if(isNaN(timestamp)) {
+    timestamp = new Date().getTime()*1000;
+  }
   await collection.insertOne({
     firestoreId: req.body.firestoreId,
     name: req.body.name,
     district: req.body.district,
     state: req.body.state,
-    timestamp: req.body.timestamp,
+    timestamp,
     path: req.file.path
   });
 
