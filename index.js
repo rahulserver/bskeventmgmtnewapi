@@ -64,12 +64,9 @@ app.post(`/${KEY}/profile-upload-single`, upload.single('profile-file'), async f
 })
 
 app.get('/districts', async function(req, res) {
-  const docRefs = await db.collection("districts").listDocuments();
-  const data = [];
-  for (let i = 0; i < docRefs.length; i++) {
-    const d = await docRefs[i].
-  }
-  await docRefs[0].get().data()
+  const collection = client.db('bskeventsdb').collection('bskEvents');
+  const docs = await collection.distinct("dst");
+  return res.send(docs);
 });
 
 app.post('/profile-upload-multiple', upload.array('profile-files', 12), function (req, res, next) {
