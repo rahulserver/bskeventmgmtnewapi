@@ -69,6 +69,17 @@ app.get('/districts', async function(req, res) {
   return res.send(docs);
 });
 
+app.get('/district/events', async function(req,res) {
+  const collection = client.db('bskeventsdb').collection('bskEvents');
+  const nPerPage = 25;
+  const page = req.query.page || 1;
+  const docs = await collection.find({"dst":req.query.dst}).sort({ "timestamp": -1 })
+    .skip( page > 0 ? ( ( page - 1 ) * nPerPage ) : 0 )
+    .limit(nPerPage)
+    .toArray();
+  return res.send(docs)
+});
+
 app.post('/profile-upload-multiple', upload.array('profile-files', 12), function (req, res, next) {
     // req.files is array of `profile-files` files
     // req.body will contain the text fields, if there were any
