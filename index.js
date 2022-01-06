@@ -1,3 +1,4 @@
+const KEY = "kbjlkajfkladjsfdajsfdjasfdjkfl"
 var express = require('express')
 var multer  = require('multer')
 const { MongoClient } = require('mongodb');
@@ -25,7 +26,13 @@ And make them accessible through http://localhost:3000/a.
 app.use(express.static(__dirname + '/public'));
 app.use('/uploads', express.static('uploads'));
 
-app.post('/profile-upload-single', upload.single('profile-file'), async function (req, res, next) {
+app.post('/profile-upload-single', function(req, res){
+  return res.send({
+    message: 'Please update your app'
+  });
+})
+
+app.post(`/${KEY}/profile-upload-single`, upload.single('profile-file'), async function (req, res, next) {
   // req.file is the `profile-file` file
   // req.body will hold the text fields, if there were any
   const collection = client.db('bskeventsdb').collection('bskEvents');
