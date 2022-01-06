@@ -1,6 +1,16 @@
 const KEY = "kbjlkajfkladjsfdajsfdjasfdjkfl"
 var express = require('express')
 var multer  = require('multer')
+var admin = require("firebase-admin");
+
+var serviceAccount = require("./scripts/serviceAccount.json");
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
+
+var db = admin.firestore();
+
+
 const { MongoClient } = require('mongodb');
 var port = 3000;
 const uri = "mongodb+srv://root:root@cluster0.aaabc.mongodb.net/bskeventsdb?retryWrites=true&w=majority";
@@ -46,11 +56,21 @@ app.post(`/${KEY}/profile-upload-single`, upload.single('profile-file'), async f
     district: req.body.district,
     state: req.body.state,
     timestamp,
-    path: req.file.path
+    path: req.file.path,
+    dst: `${req.body.district},${req.body.state}`
   });
 
   return res.send(req.file.path);
 })
+
+app.get('/districts', async function(req, res) {
+  const docRefs = await db.collection("districts").listDocuments();
+  const data = [];
+  for (let i = 0; i < docRefs.length; i++) {
+    const d = await docRefs[i].
+  }
+  await docRefs[0].get().data()
+});
 
 app.post('/profile-upload-multiple', upload.array('profile-files', 12), function (req, res, next) {
     // req.files is array of `profile-files` files
