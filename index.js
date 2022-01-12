@@ -73,11 +73,19 @@ app.get('/district/events', async function(req,res) {
   const collection = client.db('bskeventsdb').collection('bskEvents');
   const nPerPage = 25;
   const page = req.query.page || 1;
-  const docs = await collection.find({"dst":req.query.dst}).sort({ "timestamp": -1 })
-    .skip( page > 0 ? ( ( page - 1 ) * nPerPage ) : 0 )
-    .limit(nPerPage)
-    .toArray();
-  return res.send(docs)
+  if(req.query.dst) {
+    const docs = await collection.find({"dst": req.query.dst}).sort({"timestamp": -1})
+      .skip(page > 0 ? ((page - 1) * nPerPage) : 0)
+      .limit(nPerPage)
+      .toArray();
+    return res.send(docs)
+  } else {
+    const docs = await collection.find({}).sort({"timestamp": -1})
+      .skip(page > 0 ? ((page - 1) * nPerPage) : 0)
+      .limit(nPerPage)
+      .toArray();
+    return res.send(docs)
+  }
 });
 
 app.get('/district/eventsCount', async function(req,res) {
